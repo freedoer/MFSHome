@@ -13,6 +13,7 @@ router.get('/add', async(ctx, next)=> {
 
 router.get('/get', async(ctx, next)=> {
   let users = await User.findAll();
+  await ctx.json(users);
   await ctx.render('index', {res: users});
 });
 
