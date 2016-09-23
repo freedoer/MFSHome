@@ -1,0 +1,19 @@
+extends layout
+
+block content
+    form(action="/upload",method="post",enctype="multipart/form-data")
+        .form-group
+            label text
+            input(type="text",name="text[]")
+        .form-group
+            label text
+            input(type="text",name="text[]")
+        .form-group
+            label file
+            input(type="file",name="file[]")
+        .form-group
+            label file
+            input(type="file",name="file[]")
+
+        button(type="submit") submit
+

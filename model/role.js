@@ -9,7 +9,7 @@ const Role = sequelize.define('role', {
   },
   name: {
     type: Sequelize.STRING,
-    field: 'name' // Will result in an attribute that is firstName when user facing but first_name in the database
+    field: 'name' // Will result in an attribute that is firstName when username facing but first_name in the database
   },
   desc: {
     type: Sequelize.STRING
