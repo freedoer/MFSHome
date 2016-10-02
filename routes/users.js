@@ -1,3 +1,4 @@
+import {isEmpty} from '../utils'
 import User from '../model/user'
 
 var router = require('koa-router')();
@@ -26,5 +27,27 @@ router.get('/del', async(ctx, next)=> {
   let res = await User.destroy({where: {id: 1}});
   await ctx.render('index', {res});
 });
+
+// login demo
+router.get('/login', async(ctx, next)=> {
+  if (ctx.session.isNew)
+    await ctx.render('login');
+  else
+    await ctx.render('user', ctx.session);
+});
+
+router.post('/login', async(ctx, next)=> {
+  ctx.session=ctx.request.fields;
+  if (ctx.session.isNew)
+    await ctx.render('login');
+  else
+    await ctx.render('user', ctx.session);
+});
+
+router.get('/logout', async(ctx, next)=> {
+  ctx.session = null;
+  await next();
+});
+
 
 export default router;

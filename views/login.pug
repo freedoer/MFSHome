@@ -1,0 +1,17 @@
+doctype html
+html
+    head
+        title= title
+        link(rel='stylesheet', href='/stylesheets/style.css')
+    body
+        form(action="/user/login",method="post")
+            .form-group
+                label(for="username") 用户名
+                input#username.form-control(name="user[username]",type="text")
+            .form-group
+                label(for="password") 密码
+                input#password.form-control(name="user[password]",type="text")
+
+            button.btn.btn-success(type="submit") 提交
+
+

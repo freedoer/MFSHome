@@ -1,0 +1,23 @@
+extends layout
+
+block content
+    link(rel='stylesheet', href='/stylesheets/test.css')
+    p username: #{user.username} already login!
+    a(onclick="logout()") logout
+    script.
+        var xmlhttp = new XMLHttpRequest();
+
+        function stateChage() {
+            if (xmlhttp.readyState == 4) {// 4 = "loaded"
+                alert("Logout success");
+                location.href = "/user/login";
+            }
+        }
+        function logout() {
+            console.log('click');
+            url = "/user/logout";
+            xmlhttp.onreadystatechange = stateChage;
+            xmlhttp.open("GET", url, true);
+            xmlhttp.send(null);
+            return false;
+        }

@@ -11,9 +11,9 @@ const onerror = require('koa-onerror');
 const qs = require('qs');
 const bodyParser = require('koa-better-body');
 const logger = require('koa-logger');
-const stc = require('koa-static');
-const session = require('koa-session-minimal')
-const MysqlStore = require('koa-mysql-session')
+const stylus = require('koa-stylus');
+const serve = require('koa-static');
+const session = require('koa-session-redis3');
 
 const index = require('./routes/index');
 const users = require('./routes/users');
@@ -25,25 +25,34 @@ app.use(convert(bodyParser({
 })));
 app.use(convert(json()));
 app.use(convert(logger()));
-app.use(convert(stc(__dirname + '/public')));
+app.use(stylus('./public'));
+app.use(convert(serve(__dirname + '/public')));
+
+//state demo
+app.use(async(ctx, next)=> {
+  ctx.state.xxx = "this is in the state, only used in one request";
+  return await next();
+});
+
+app.keys = ['mfs'];
+app.use(convert(session({
+    store: {
+      //redis address
+      host: process.env.REDIS_ADDRESS || '127.0.0.1',
+      //redis port
+      port: process.env.REDIS_POSRT || 6379,
+      // time to live
+      ttl: 3600,
+      //
+      keySchema: 'mfs'
+    },
+  },
+)));
 
 app.use(convert(views(__dirname + '/views', {
-  extension: 'jade'
+  extension: 'pug'
 })));
 
-// TODO: session has some problem ,fix it later
-// app.use(session({
-//   store: new MysqlStore({
-//     user: dbConfig.username,
-//     password: dbConfig.password,
-//     database: dbConfig.database,
-//     host: dbConfig.host
-//   }),
-//   rolling: true,
-//   cookie: {
-//     maxage: sessionConfig.maxage
-//   }
-// }));
 
 // logger
 app.use(async(ctx, next) => {
@@ -54,7 +63,7 @@ app.use(async(ctx, next) => {
 });
 
 router.use('/', index.routes(), index.allowedMethods());
-router.use('/username', users.routes(), users.allowedMethods());
+router.use('/user', users.routes(), users.allowedMethods());
 
 app.use(router.routes(), router.allowedMethods());
 // response
