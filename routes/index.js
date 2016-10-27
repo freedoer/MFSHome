@@ -22,6 +22,15 @@ router.get('param/:key', async(ctx, next)=> {
   await ctx.render('index', {res: ctx.params});
 });
 
+// using /xx?_method=post/put/delete to fake request
+router.get('method', async(ctx, next)=> {
+  await ctx.render('index', {res: 'think as get method'});
+});
+
+router.post('method', async(ctx, next)=> {
+  await ctx.render('index', {res: 'think as post method'});
+});
+
 // /query?query1=xxx&query2=yyy
 router.get('query', async(ctx, next)=> {
   console.log(ctx.query);

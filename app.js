@@ -13,7 +13,8 @@ const bodyParser = require('koa-better-body');
 const logger = require('koa-logger');
 const stylus = require('koa-stylus');
 const serve = require('koa-static');
-const session = require('koa-session-redis3');
+const session = require('koa-session-minimal');
+const MysqlStore = require('./adapter/mysql-store');
 
 const index = require('./routes/index');
 const users = require('./routes/users');
@@ -25,7 +26,7 @@ app.use(convert(bodyParser({
 })));
 app.use(convert(json()));
 app.use(convert(logger()));
-app.use(stylus('./public'));
+app.use(convert(stylus('./public')));
 app.use(convert(serve(__dirname + '/public')));
 
 //state demo
@@ -34,20 +35,25 @@ app.use(async(ctx, next)=> {
   return await next();
 });
 
+//change method
+app.use(async(ctx, next)=> {
+  if (ctx.query._method) {
+    ctx.method = ctx.query._method.toUpperCase();
+    delete ctx.query._method;
+  }
+
+  return await next();
+});
+
 app.keys = ['mfs'];
-app.use(convert(session({
-    store: {
-      //redis address
-      host: process.env.REDIS_ADDRESS || '127.0.0.1',
-      //redis port
-      port: process.env.REDIS_POSRT || 6379,
-      // time to live
-      ttl: 3600,
-      //
-      keySchema: 'mfs'
-    },
+app.use(session({
+    store: new MysqlStore(sessionConfig),
+    rolling: true,
+    cookie: {
+      maxAge: sessionConfig.maxAge
+    }
   },
-)));
+));
 
 app.use(convert(views(__dirname + '/views', {
   extension: 'pug'
