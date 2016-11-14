@@ -1,5 +1,5 @@
 import {Sequelize, sequelize} from './base';
-import Role from './role'
+import {Role} from './role'
 
 const User = sequelize.define('user', {
   id: {
@@ -30,4 +30,6 @@ const User = sequelize.define('user', {
 });
 
 User.sync();
-export default User;
+
+
+export {User};

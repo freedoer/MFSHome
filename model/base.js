@@ -3,9 +3,7 @@ import dbConfig from '../config/db'
 
 const sequelize = new Sequelize(dbConfig.database, dbConfig.user, dbConfig.password, dbConfig);
 
-const BASE = {
+export {
   Sequelize,
   sequelize
 };
-
-export default BASE;

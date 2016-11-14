@@ -1,5 +1,5 @@
 import {Sequelize, sequelize} from './base';
-import ArticleType from './article-type'
+import {ArticleType} from './article-type'
 const Article = sequelize.define('article', {
   id: {
     primaryKey: true,
@@ -12,12 +12,6 @@ const Article = sequelize.define('article', {
   },
   content: {
     type: Sequelize.TEXT
-  },
-  createAt:{
-  	type:Sequelize.BIGINT,
-  },
-  updateAt:{
-  	type:Sequelize.BIGINT,
   },
   type: {
     type: Sequelize.INTEGER,
@@ -33,6 +27,6 @@ const Article = sequelize.define('article', {
   freezeTableName: true // Model tableName will be the same as the model name
 });
 
-Role.sync();
+Article.sync();
 
-export default Role;
+export {Article};

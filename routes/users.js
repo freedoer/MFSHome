@@ -1,5 +1,5 @@
 import {isEmpty} from '../utils'
-import User from '../model/user'
+import {User} from '../model'
 
 var router = require('koa-router')();
 

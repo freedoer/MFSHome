@@ -20,4 +20,4 @@ const Role = sequelize.define('role', {
 
 Role.sync();
 
-export default Role;
+export {Role};
